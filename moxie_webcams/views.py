@@ -1,6 +1,7 @@
 from flask import request
 
 from moxie.core.views import ServiceView, accepts
+from moxie.core.cache import cache
 from moxie.core.exceptions import abort
 from moxie.core.representations import HAL_JSON, JSON
 from moxie_webcams.providers import WebcamProviderException
@@ -26,6 +27,7 @@ class StillImage(ServiceView):
     """Get an image for the given webcam
     """
 
+    @cache.cached(timeout=10)
     def handle_request(self, slug):
         """Get an image for the given webcam
         :param slug: unique identifier of the webcam
