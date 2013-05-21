@@ -1,5 +1,4 @@
 import yaml
-import requests
 
 from moxie.core.service import Service
 
