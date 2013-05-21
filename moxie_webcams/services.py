@@ -1,5 +1,3 @@
-import yaml
-
 from moxie.core.service import Service
 
 from .domain import Webcam
@@ -9,7 +7,7 @@ from .providers.still_image import StillImageProvider
 class WebcamsService(Service):
 
     def __init__(self, webcams_list):
-        self.webcams = yaml.safe_load(open(webcams_list))
+        self.webcams = webcams_list
 
     def get_all_webcams(self):
         return [Webcam.from_yaml(k, v) for k, v in self.webcams.iteritems()]
