@@ -2,6 +2,8 @@ import yaml
 
 from moxie.core.service import Service
 
+from .domain import Webcam
+
 
 class WebcamsService(Service):
 
@@ -9,7 +11,7 @@ class WebcamsService(Service):
         self.webcams = yaml.safe_load(open(webcams_list))
 
     def get_all_webcams(self):
-        return self.webcams
+        return [Webcam.from_yaml(k, v) for k, v in self.webcams.iteritems()]
 
     def get_still_image(self, webcam_slug):
         """Get an image for the given webcam
