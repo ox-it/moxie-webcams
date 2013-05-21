@@ -1,7 +1,9 @@
 from flask import request
 
 from moxie.core.views import ServiceView, accepts
+from moxie.core.exceptions import abort
 from moxie.core.representations import HAL_JSON, JSON
+from moxie_webcams.providers import WebcamProviderException
 
 from moxie_webcams.services import WebcamsService
 from moxie_webcams.representations import HALWebcamsRepresentation
@@ -30,4 +32,12 @@ class StillImage(ServiceView):
         :return: image (tbd)
         """
         service = WebcamsService.from_context()
-        return service.get_still_image(slug)
+        try:
+            return service.get_still_image(slug)
+        except WebcamProviderException:
+            # TODO return appropriate header to try again soon
+            return abort(503, body="An error has occured")
+
+    @accepts('image/jpeg')
+    def as_image(self, image):
+        return image

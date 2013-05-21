@@ -1,0 +1,2 @@
+class WebcamProviderException(BaseException):
+    pass

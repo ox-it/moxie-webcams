@@ -1,8 +1,10 @@
 import yaml
+import requests
 
 from moxie.core.service import Service
 
 from .domain import Webcam
+from .providers.still_image import StillImageProvider
 
 
 class WebcamsService(Service):
@@ -18,4 +20,6 @@ class WebcamsService(Service):
         :param webcam_slug: unique identifier of the webcam
         :return: tbd
         """
-        pass
+        provider = StillImageProvider()
+        webcam = self.webcams.get(webcam_slug)
+        return provider.get_image(webcam['url'])
