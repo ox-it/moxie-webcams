@@ -1,4 +1,5 @@
 from moxie.core.views import ServiceView
+from moxie_webcams.services import WebcamsService
 
 
 class Webcams(ServiceView):
@@ -6,7 +7,8 @@ class Webcams(ServiceView):
     """
 
     def handle_request(self):
-        pass
+        service = WebcamsService.from_context()
+        return service.get_all_webcams()
 
 
 class StillImage(ServiceView):
@@ -14,4 +16,9 @@ class StillImage(ServiceView):
     """
 
     def handle_request(self, slug):
-        pass
+        """Get an image for the given webcam
+        :param slug: unique identifier of the webcam
+        :return: image (tbd)
+        """
+        service = WebcamsService.from_context()
+        return service.get_still_image(slug)
