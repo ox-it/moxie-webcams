@@ -27,6 +27,8 @@ class StillImage(ServiceView):
     """Get an image for the given webcam
     """
 
+    as_json = None      # Overriding default behaviour of providing JSON
+
     @cache.cached(timeout=10)
     def handle_request(self, slug):
         """Get an image for the given webcam
@@ -35,11 +37,16 @@ class StillImage(ServiceView):
         """
         service = WebcamsService.from_context()
         try:
-            return service.get_still_image(slug)
+            image = service.get_still_image(slug)
+            return image
         except WebcamProviderException:
             # TODO return appropriate header to try again soon
-            return abort(503, body="An error has occured")
+            return None
 
-    @accepts(HAL_JSON, JSON, 'image/jpeg')
+    @accepts('*/*')
     def as_image(self, image):
-        return image
+        if image:
+            # TODO provide correct headers for cache
+            return image, 200, {'Content-Type': 'image/jpeg'}
+        else:
+            return abort(503, body="An error has occured")
