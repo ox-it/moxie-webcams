@@ -38,6 +38,6 @@ class StillImage(ServiceView):
             # TODO return appropriate header to try again soon
             return abort(503, body="An error has occured")
 
-    @accepts('image/jpeg')
+    @accepts(HAL_JSON, JSON, 'image/jpeg')
     def as_image(self, image):
         return image
