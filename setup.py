@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 
-install_requires = open('requirements.txt').readlines()
+#install_requires = open('requirements.txt').readlines()
 
 setup(name='moxie-webcams',
     version='0.1',
@@ -12,6 +12,6 @@ setup(name='moxie-webcams',
     url='https://github.com/ox-it/moxie-webcams',
     include_package_data=True,
     setup_requires=["setuptools"],
-    install_requires=install_requires,
-    test_suite="moxie_webcams.tests",
+    #install_requires=install_requires,
+    #test_suite="moxie_webcams.tests",
 )
