@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 from flask import request
 
 from moxie.core.views import ServiceView, accepts
@@ -32,6 +32,8 @@ class StillImage(ServiceView):
 
     TIMEOUT = 10
 
+    expires = timedelta(seconds=TIMEOUT)
+
     @cache.cached(timeout=TIMEOUT)
     def handle_request(self, slug):
         """Get an image for the given webcam
@@ -49,15 +51,6 @@ class StillImage(ServiceView):
     @accepts('*/*')
     def as_image(self, image):
         if image:
-            return image, 200, {'Content-Type': 'image/jpeg',
-                                'Expires': get_expire_date(StillImage.TIMEOUT),
-                                'Cache-Control': 'max-age={seconds}, must-revalidate'
-                                                .format(seconds=StillImage.TIMEOUT)}
+            return image, 200, {'Content-Type': 'image/jpeg'}
         else:
             return abort(503, body="An error has occured")
-
-
-def get_expire_date(seconds):
-    expires = datetime.utcnow()
-    expires += timedelta(seconds=seconds)
-    return expires.strftime("%a, %d %b %Y %H:%M:%S GMT")
