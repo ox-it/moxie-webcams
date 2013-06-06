@@ -1,3 +1,4 @@
+from datetime import timedelta
 from flask import request
 
 from moxie.core.views import ServiceView, accepts
@@ -29,7 +30,11 @@ class StillImage(ServiceView):
 
     as_json = None      # Overriding default behaviour of providing JSON
 
-    @cache.cached(timeout=10)
+    TIMEOUT = 10
+
+    expires = timedelta(seconds=TIMEOUT)
+
+    @cache.cached(timeout=TIMEOUT)
     def handle_request(self, slug):
         """Get an image for the given webcam
         :param slug: unique identifier of the webcam
@@ -46,7 +51,6 @@ class StillImage(ServiceView):
     @accepts('*/*')
     def as_image(self, image):
         if image:
-            # TODO provide correct headers for cache
             return image, 200, {'Content-Type': 'image/jpeg'}
         else:
             return abort(503, body="An error has occured")
