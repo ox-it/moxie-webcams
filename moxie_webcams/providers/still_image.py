@@ -16,8 +16,9 @@ class StillImageProvider(object):
             response = requests.get(url, timeout=self.timeout)
             return response.content
         except RequestException as re:
-            logger.warn("Couldn't fetch image", exc_info=True,
-                        data={
-                            'url': url
-                        })
+            logger.warn("Couldn't fetch image", exc_info=True, extra={
+                'data': {
+                    'url': url
+                }
+            })
             raise WebcamProviderException(re.message)
