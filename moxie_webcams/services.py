@@ -19,4 +19,7 @@ class WebcamsService(Service):
         """
         provider = StillImageProvider()
         webcam = self.webcams.get(webcam_slug)
-        return provider.get_image(webcam['url'])
+        if webcam:
+            return provider.get_image(webcam['url'])
+        else:
+            return None
