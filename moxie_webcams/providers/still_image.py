@@ -14,6 +14,7 @@ class StillImageProvider(object):
     def get_image(self, url):
         try:
             response = requests.get(url, timeout=self.timeout)
+            response.raise_for_status()
             return response.content
         except RequestException as re:
             logger.warn("Couldn't fetch image", exc_info=True, extra={
